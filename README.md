@@ -32,3 +32,23 @@ I find the [`gh`](https://cli.github.com/) command-line utility useful for manag
 ## Writing
 
 ## Figures
+
+### Figure theming
+
+### Exporting figures
+
+Figure export is done via `ggsave` and should *always* be to a PDF file.
+<summary>Why PDF?</summary>
+<details>
+Saving figures as PDFs (or very rarely, when there are PDF bugs, as SVGs) is preferable to PNGs for a few reasons. 
+
+1. File sizes are smaller, so `git` syncs faster and your repository uses less disk space
+1. PDF figuress avoids grainy images in the paper PDF and reduces the paper PDF file size
+1. Many journals need high-res images and prefer you to provide PDFs anyway
+</details>
+
+You should always specify a `height` and `width`, which are measured in inches by default.
+For most figures, I use `width=6.5`, which is the width of the text block on letter-sized pages.
+If the figure will not be occupying the full width, you can use a smaller number.
+Always using the same width ensures that the text size in your figures will be consistent across figures and will match your paper text.
+
