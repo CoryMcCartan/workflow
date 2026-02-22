@@ -38,8 +38,8 @@ I find the [`gh`](https://cli.github.com/) command-line utility useful for manag
 ### Exporting figures
 
 Figure export is done via `ggsave` and should *always* be to a PDF file.
-<summary>Why PDF?</summary>
 <details>
+<summary>Why PDF?</summary>
 Saving figures as PDFs (or very rarely, when there are PDF bugs, as SVGs) is preferable to PNGs for a few reasons. 
 
 1. File sizes are smaller, so `git` syncs faster and your repository uses less disk space
