@@ -72,9 +72,71 @@ A good folder structure, and system for organizing your files, is the foundation
 
 ### Folder structure
 
+```
+project-directory/
+  data-raw/
+  data-out/
+  paper/
+    _extensions/
+    figures/
+    tables/
+    data/
+  R/
+  replication/
+  src/
+```
+
 ### Using this structure in a new project
 
 To make it easy to set up a new project with this structure, you can use the following script.
+
+## Version control
+
+Introductory materials on using `git` abound, and GitHub desktop is well-documented.
+[Here is a good quick overview](https://betterexplained.com/articles/a-visual-guide-to-version-control/).
+I do recommend at least starting with command-line git, so you can get a better feel for what is going on.
+If you really want to get into the weeds, the [Git documentation on its internals](https://git-scm.com/book/en/v2/Git-Internals-Plumbing-and-Porcelain) is actually quite good.
+
+Some general principles for using `git` for a research project:
+
+- **Do not commit large or auto-generated files.**
+  Once a file is committed, it is carried around the repository forever, even if you delete it.
+  This makes it slow to download your repository and share it with coauthors.
+  Commit large files, especially non-text files for which Git is less well-suited, with caution!
+
+  - If a file is generated from code (like a `.tex` rendered from a `.qmd`), then it should not be committed at all, since it can always be regenerated.
+  Raw data files should also not be committed—I recommend sharing them through a different system.
+  Most coauthors do not need access to the raw data, just the cleaned data or outputs of the analysis.
+  (It is also possible for your analysis code to download the raw data itself, which is ideal where possible.)
+  The exception to this are paper figures and tables, which need to be present to render the paper and for which it would not be reasonable to expect coauthors to generate them every time in order to render the paper.
+
+  - You should _aggressively_ use `.gitignore` to avoid accidentally committing large or auto-generated files.
+  **NEVER** override the `.gitignore` file to commit a large file.
+  Instead, edit the `.gitignore` to allow the file as a special case.
+  GitHub desktop makes it too easy to force-add a file, creating headaches for everyone later.
+
+- **Commit often, but not too often.**
+  Smaller commits are easier to review, but hundreds of tiny commits are hard to review.
+  The general rule of thumb is that a commit should be a single unified change.
+  Revising Section 2, or adding a new feature, or a new simulation, are good unit-sized commits.
+  If you haven't yet pushed to GitHub, (or at the point of merging a pull request), you can _squash_ multiple commits together into one.
+
+- **Describe your changes.**
+  Type a short and descriptive commit message!
+  It takes a few sentences, and will make it much easier to find changes later on, should you need to. "edits", "up", "fixes", etc. are not descriptive commit messages.
+
+- **Make larger changes in branches.**
+  If you are making a big editing pass, reorganizing code, etc., make a branch and put your edits there.
+  That way, your intermediate work won't affect coauthors, and it will be even easier to revert your change if you don't like them.
+  You can also use the "pull request" feature of GitHub to review these larger changes in a more structured way.
+
+- **Use `git tag` to mark important points in the project history.**
+  For example, you can tag the commit that corresponds to the version of the paper you submit to a journal, so that you can easily find it later on if you need to make changes for a revision or resubmission.
+  If I want to back up a specific version of the code base before making a big change, I will make a tag for the most recent commit.
+
+At first, using `git` may seem like a pain.
+Most of the time, it is not strictly needed.
+But when you suddenly need to go recover an old file version, or when you need to review edits from several coauthors, you will be thankful for setting up version control from the start.
 
 ## Code
 
@@ -172,6 +234,9 @@ New software like [Typst](https://typst.app/docs/) can render documents much mor
 Finally, you can include raw TeX in your Quarto file, so you can ease yourself into the transition by using TeX versions of most Quarto syntax.
 </details>
 
+A public example (from several years ago) of this setup can be found [here](https://github.com/CoryMcCartan/proj-avg/blob/main/paper/proj-avg.qmd).
+You can also ask me for more recent examp les.
+
 #### Paper formatting
 ##### Default template
 I have built [a Quarto template](https://github.com/CoryMcCartan/cmc-article/) that can render both into Typst (faster) and TeX.
@@ -187,7 +252,7 @@ To include your own macros in Typst or tweak the formatting, create a file `pape
 
 ````markdown
 ::: {.content-visible when-format="typst"}
-```{{=typst}}
+```{=typst}
 // Any Typst-specific formatting code here
 ```
 
@@ -268,7 +333,7 @@ The basic format for figures:
 ```
 If you generate the figure from an R chunk, then the syntax is
 ````md
-```{{r fig-key}}
+```{r fig-key}
 #| fig-cap: |
 #|   Figure caption here.
 ggplot(...) + ...

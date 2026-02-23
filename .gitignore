@@ -72,6 +72,7 @@ src/*
 *.bbl
 *.blg
 *.log
+*.synctex.gz
 *.o
 *.so
 *.dll
