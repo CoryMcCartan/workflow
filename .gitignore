@@ -27,7 +27,6 @@ renv.lock
 *.pdf
 *.html
 *.png
-*.svg
 *.jpg
 *.jpeg
 
@@ -44,13 +43,10 @@ data-out/*.*
 paper/*.tex
 !paper/header.tex
 !paper/figures/*.pdf
-!paper/figures/*/*.pdf
-!paper/figures/*.png
 !paper/data/*.rds
 !paper/data/*.csv
 !paper/tables/*.csv
-!paper/figures/*.csv
-!paper/figures/*.rds
+!paper/tables/*.tex
 paper/*.cls
 paper/*.bst
 
