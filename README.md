@@ -80,13 +80,226 @@ To make it easy to set up a new project with this structure, you can use the fol
 
 ## Writing
 
-### Best practices for Quarto
+### Order of operations
 
-#### Appendix references
+Some projects may naturally lead to a different ordering, but I have found the following sequence to be best for going about writing up a project.
+
+1. Create the paper file early on, and scaffold the main headings, which are almost always the same across papers.
+
+1. As you develop theoretical results, write up the statements of the results and their proofs in the appropriate section of the paper.
+As you go, you can also draft "Setup" or "Notation" sections or subsections.
+When you are happy with a proof, move it to an appendix section titled "Proofs" and a subsection titled, e.g. `Proof of @prp-yourprop`, which will cross-reference the statement of the result.
+
+1. When you are ready to write the paper, first draft a title.
+It should convey the main point of the paper as concisely as possible.
+Do _not_ title a paper like "Clever Pun: Vague Description of Topic," which is unfortunately all too common.
+Only if the short title or pun is exceptionally clever and well-suited (and therefore likely to increase how memorable your paper is) should you include it.
+
+1. Next, draft an abstract.
+The specific analysis findings may not yet be known, but this step allows you to hammer out the framing of the paper and iterate on that framing quickly.
+Iterate a lot with your coauthors until you are happy with the abstract.
+
+1. Draft an introduction.
+There can be some roughness here, and there may need to be some blank space for specific numerical findings.
+Roughly, every sentence of the abstract should become a paragraph in the introduction.
+
+1. Fill out the supporting text in the methods section, and write up simulations, validation, and application, as appropriate.
+Since your argument and its key point have been honed in writing the abstract and drafting the introduction, you can make sure to emphasize the key point throughout, and organize your writing around your main argument.
+If there are general takeaways that you want to emphasize, including more speculative or intuition-based discussion, you can move these to an unstructured Discussion section at the end.
+These are points that are subsidiary to your main argument, or perhaps require reading most of the paper to understand.
+
+1. Write a discussion and finish writing the introduction.
+Most discussion sections are short.
+Avoid simply summarizing your paper—the introduction has done this more effectively.
+In at most one paragraph, you can restate your key argument or contribution and the evidence supporting it.
+Then, you can discuss more general points or takeaways for the broader field, as well as directions for future work.
+The introduction may need some re-editing at this point.
+
+1. Edit.
+Take turns with your coauthors editing the paper section-by-section, focusing on clarity.
+
+
+### General writing advice
+I strongly recommend reading Gopen & Swan's [*The Science of Scientific Writing*](https://cseweb.ucsd.edu/~swanson/papers/science-of-writing.pdf).
+It is 16 very readable pages.
+
+Two general but critical principles in technical writing are:
+
+1. **Know your audience.**
+When writing a paper, always remember that most readers are skimming your work.
+As such, it's important to structure your writing hierarchically, so that readers can locate parts of the paper relevant to them, and understand which points are the most important.
+This partly why I recommend drafting an abstract early on in the writing process.
+Mechanically, hierarchical structure means adding clear signposting so that readers understand how each section, subsection, and even paragraph relates to the others: is it making a new point, making a contrasting point, supporting a previous point with evidence, filling in new detail, or something else?
+
+1. **Know your argument.**
+Your paper is making one or two key points.
+Sometimes, these are obvious: "My new method does X better than existing methods."
+But it is vital to know the argument you are making, and any subsidiary but important points you want readers to take away, and to make sure that thesse points are made clearly throughout the paper.
+
+Some useful techniques for editing:
+
+1. Give your paper to a friend, and have them read the abstract and introduction in 2 minutes.
+Then take the paper away and ask them to tell you the key points of the paper.
+If they miss a point that you feel is important, that is a great sign for what needs to be edited.
+
+1. Read your paper aloud.
+Not all of it, necessarily, but at least the abstract and introduction.
+When you stumble reading part of the paper, your readers will likely stumble there, too.
+
+1. If a paragraph feels hard to read, take a highlighter to it and mark the topic and stress position in each sentence (from Gopen & Swan).
+Rephrase individual sentences so that these positions work together coherently and make sense in relation to the larger context of that section.
+
+### Technical writing setup
+You should use [Quarto](https://quarto.org/) to write your paper.
+Quarto, the successor to R Markdown, enables you to cleanly separate content and formatting, include numerical results from your analysis directly in the text, and has a syntax that is easier to read and type than pure LaTeX (math in Quarto is still written with familiar TeX notation).
+
+<details>
+<summary>More on Quarto over TeX</summary>
+
+In TeX, there are no clean and modern solutions for the need to include numerical results from an analysis in the manuscript.
+In practice, most people copy in numbers manually, which is error-prone and time consuming.
+Even if you think the numbers will be copied once, I can almost guaranteee you will find yourself repeating the process multiple times, and it will not be long before you forget to keep numbers in sync and end up with a mismatch.
+
+On the formatting side, Quarto separates all formatting into template files, of which there are many built-in options.
+This way, if you need to reformat for a journal, it can be as easy as changing from, e.g., `format: pdf` to `format: jasa-pdf`.
+Sometimes, there are some additional changes, but these are much more minimal compared to reformatting in TeX, where most people intermingle their own TeX definitions with the paper formatting.
+
+This independence of content and formatting also enbales the use of alternative rendering backends.
+While TeX is powerful, `pdflatex` and `xelatex` are slow and often require multiple runs to get references and labels right.
+New software like [Typst](https://typst.app/docs/) can render documents much more quickly, and is far easier to customize than TeX.
+(Quick: how would you change the styling of your headings in TeX? Even with an extension package to help, the syntax is not intuitive and almost impossible to memorize.)
+
+Finally, you can include raw TeX in your Quarto file, so you can ease yourself into the transition by using TeX versions of most Quarto syntax.
+</details>
+
+#### Paper formatting
+##### Default template
+I have built [a Quarto template](https://github.com/CoryMcCartan/cmc-article/) that can render both into Typst (faster) and TeX.
+You can add it by running `quarto add CoryMcCartan/cmc-article` from the `paper/` folder.
+Then you can specify `format: cmc-article-typst` or `format: cmc-article-pdf` in the YAML header of your Quarto file.
+
+##### Typst versus TeX
+I recommend using the Typst format to start, since it renders much faster.
+For arXiv submissions, you may want to switch to TeX, so that you can submit the source files and your paper will be rendered to HTML.
+For journal submission, you will likely need to swap out the template for a journal-specific TeX one.
+
+To include your own macros in Typst or tweak the formatting, create a file `paper/_header.md`:
+
+````markdown
+::: {.content-visible when-format="typst"}
+```{{=typst}}
+// Any Typst-specific formatting code here
+```
+
+<!-- TeX macros here, e.g.-->
+\newcommand{\F}{\mathcal{F}}
+:::
+````
+
+Include this file in the manuscript by putting `{{< include _header.md >}}` at the top of your Quarto file, after the YAML header.
+
+For TeX, you can create a `header.tex` file with the same macro definitions, and include it with `include-in-header: header.tex` under the `format: cmc-article-pdf` section of your YAML header.
+
+I have not yet experimented with ways to avoid copying macros from one file to the other when changing formats, but some kind of `{{< include header.tex >}}` in the `.md` syntax might work.
+This is a relatively rare operation, thankfully.
+
+##### Journal templates
+When it comes time to submit to a journal, check and see if there is already a Quarto template for that journal.
+You can look at the [official repository](https://github.com/quarto-journals/), or [search all of GitHub](https://github.com/search?q=topic%3Aquarto-template+journal&type=repositories).
+If not, you can make your own without too much trouble by following the instructions in the [Quarto documentation](https://quarto.org/docs/journals/formats.html).
+The most work is usually spent forwarding the author metadata into the right part of the template.
+If you do so, save your template to its own repository and publish it so that you and others can avoid doing this work twice!
+
+#### Quarto best practices
+In general, the Quarto documentation is excellent.
+The [guide](https://quarto.org/docs/guide/) covers all of the key features for scientific writing, and the [reference](https://quarto.org/docs/reference/) documents format-specific YAML options.
+
+##### Don't repeat yourself
+Make a macro for any notation you are going to use multiple times.
+It saves typing and especially saves headaches if you ever decide to change your notation.
+
+##### Line wrapping
+I recommend writing each sentence on a single line.
+Compared to writing each paragraph on a line, this aids in tracking edits in version control.
+Compared to manually wrapping lines to e.g. 80 characters, it avoids unnecessary version control noise.
+If you use the Quarto visual editor in RStudio or Positron, there is an option to automatically wrap lines at the sentence level.
+
+##### Equations
+For display math, use
+```md
+We know from arithmetic that
+$$
+1 + 1 = 2,
+$$ {#eq-1p1}
+but what is $1 + 2$?
+```
+The trailing `{#eq-1p1}` is optional, but allows you to reference the equation with `@eq-1p1` and have it automatically numbered.
+
+When you have multiple equations to align, the current best practice in Quarto is
+```md
+$$
+\begin{aligned}
+a + b &= c \\
+d + e &= f
+\end{aligned}
+$$
+```
+One drawback is that labeling this equation will label all lines.
+You can try using `\begin{align}` and no surrounding `$$`, but this will not work in Typst.
+
+##### Citations
+You reference papers with `@key`, where `key` is the key for the paper in your BibTeX file.
+For parenthetical cites, use `[@key]`.
+For multiple parenthetical cites, use `[@key1; @key2]`.
+You can reference the year only (in parentheses) with `[-@key]`.
+[Read more](https://pandoc.org/MANUAL.html#citations).
+
+##### Cross references
+Add `{#key}` to the end of a section to be able to cross-reference it with `@sec-key`.
+
+Don't use `\begin{figure}`, `\begin{table}` environments, as these are more verbose and aren't portable across rendering formats.
+They also require more verbose cross-referencing.
+If you make a figure, table, or theorem with Quarto syntax, you can cross reference with `@fig-key`, `@tbl-key`, `@thm-key`, etc.
+[Read more](https://quarto.org/docs/authoring/cross-references.html).
+
+The basic format for figures:
+```md
+![Caption]{#fig-key}
+```
+If you generate the figure from an R chunk, then the syntax is
+````md
+```{{r fig-key}}
+#| fig-cap: |
+#|   Figure caption here.
+ggplot(...) + ...
+```
+````
+
+The similar syntax is used for tables generated from R, but with `tbl-` instead of `fig-`.
+
+The basic format for mathematical results is
+```md
+::: {#thm-key}
+# Optional theorem title
+
+Theorem statement.
+:::
+
+::: {.proof}
+Proof here.
+:::
+```
+
+
+##### Appendix references
 You can add a label to an appendix section just as with the main text: `{#sec-sectionkey}`.
 Then you can reference it with `[Appendix @sec-sectionkey]`, which will render as, e.g., `Appendix A` (as long as your template file is configured properly to use lettered appendices).
 
-However, when the paper is accepted at a journal, the appendices will be
+However, when the paper is accepted at a journal, the appendices will be separated and published as an independent PDF.
+You will have to manually remove references to the appendices from the main text.
+It is far easier to avoid this by writing the main text without any references to specific appendix sections.
+A good table of contents in the appendix will take care of the rest.
+It's harder to avoid making to include cross-references from the appendix to the main text, but at least at the paper acceptance stage you will only have to edit one document.
 
 
 ## Figures
