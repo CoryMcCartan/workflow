@@ -72,23 +72,36 @@ A good folder structure, and system for organizing your files, is the foundation
 
 ### Folder structure
 
+I recommend the following folder structure as a starting point.
+
 ```
 project-directory/
-  data-raw/
-  data-out/
-  paper/
-    _extensions/
+  data-raw/          [not version controlled]
+  data-out/          [intermediate or cleaned data]
+  explore/           [exploratory scripts]
+  paper/             [paper text and figures]
+    _extensions/     [for Quarto template files]
     figures/
     tables/
     data/
-  R/
-  replication/
-  src/
+  R/                 [utility code and functions]
+  replication/       [analysis code that produces paper results]
+  submission/        [cover letters, reviews, etc.]
 ```
+
+I usually put a `README.md` in `data-raw/` and `data-out/` which documents the purpose of the folder and its contents (for the replication package).
+
+Within `paper/`, I (weakly) recommend naming your manuscript something like `paper_name.qmd`, where `paper_name` is your short descriptor, like `redist` or `linkage`.
+This helps you find your paper PDF with computer-wide search more easily than if it is called `paper.pdf` or `main.pdf`.
+
+Separate `R/` and `replication/` folders help keep reusable code separate from code that is run once to replicate your analyses.
+In many projects, large parts of the code in `R/` should be brought into an independent R package in a separate public-facing repository.
+This is discussed more [below](#code).
 
 ### Using this structure in a new project
 
-To make it easy to set up a new project with this structure, you can use the following script.
+To make it easy to set up a new project with this structure, you can use included `setup.sh` script.
+Run it in an empty new project folder and it will create the folder structure above, along with a basic `.gitignore`, READMEs, and a Quarto template file for the paper.
 
 ## Version control
 
