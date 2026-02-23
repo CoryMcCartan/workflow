@@ -4,9 +4,13 @@ This document collects my opinionated recommendations on how to organize and man
 
 **Using this document:**
 
--   Quickly jump to [**Project setup**](#project-setup), [**Code**](#code), [**Writing**](#writing), or [**Figures**](#figures).
--   I recommend reading the whole document once in order, if you haven't before.
--   If you are viewing this file on GitHub, the upper right corner of this container contains a table-of-contents dropdown.
+- I recommend reading the whole document once in order, if you haven't before.
+
+- Set up a new project by running `curl corymccartan.com/workflow/setup.sh | bash` in a new empty project directory
+
+- Quickly jump to [**Project setup**](#project-setup), [**Code**](#code), [**Writing**](#writing), or [**Figures**](#figures).
+
+- If you are viewing this file [on GitHub](https://github.com/CoryMcCartan/workflow), the upper right corner of this container contains a table-of-contents dropdown.
 
 ## General principles
 
@@ -100,8 +104,13 @@ This is discussed more [below](#code).
 
 ### Using this structure in a new project
 
-To make it easy to set up a new project with this structure, you can use included `setup.sh` script.
-Run it in an empty new project folder and it will create the folder structure above, along with a basic `.gitignore`, READMEs, and a Quarto template file for the paper.
+To make it easy to set up a new project with this structure, you can use the included `setup.sh` script.
+In an empty new project folder, run
+```bash
+curl corymccartan.com/workflow/setup.sh | bash
+```
+The script will create the folder structure above, along with a basic `.gitignore`, READMEs, and a Quarto template file for the paper.
+You can then push the repository to GitHub with `gh repo create`.
 
 ## Version control
 
@@ -152,6 +161,12 @@ Most of the time, it is not strictly needed.
 But when you suddenly need to go recover an old file version, or when you need to review edits from several coauthors, you will be thankful for setting up version control from the start.
 
 ## Code
+
+### General organization
+
+### R style
+
+### File types
 
 ## Writing
 

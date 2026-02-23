@@ -40,7 +40,7 @@ data-raw/*
 data-out/*.*
 !data-out/*.md
 
-# paper files
+# Paper files
 paper/*.tex
 !paper/header.tex
 !paper/figures/*.pdf
