@@ -6,7 +6,10 @@ This document collects my opinionated recommendations on how to organize and man
 
 - I recommend reading the whole document once in order, if you haven't before.
 
-- Set up a new project by running `curl corymccartan.com/workflow/setup.sh | bash` in a new empty project directory
+- Set up a new project by running the following in a new empty project directory:
+```bash
+curl corymccartan.com/workflow/setup.sh | bash
+```
 
 - Quickly jump to [**Project setup**](#project-setup), [**Code**](#code), [**Writing**](#writing), or [**Figures**](#figures).
 
