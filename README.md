@@ -321,6 +321,21 @@ Compared to writing each paragraph on a line, this aids in tracking edits in ver
 Compared to manually wrapping lines to e.g. 80 characters, it avoids unnecessary version control noise.
 If you use the Quarto visual editor in RStudio or Positron, there is an option to automatically wrap lines at the sentence level.
 
+##### Including data
+As discussed above, I recommend exporting numbers that need to be included in the manuscript as small version-controlled files that can be read in by the Quarto document.
+For small sets of numbers, especially if they can be naturally contained in a nested `list()`, I recommend `dput()` and `dget()`, which produce small, human-readable output.
+For slightly larger sets of numbers, especially if organized in data frames, a CSV file is ideal, though make sure to specify data types on the Quarto side to avoid issues.
+A _compressed_ RDS file is a last resort.
+
+I generally have a single setup chunk at the top of the Quarto document that loads any packages and sets any global constants.
+I usually import the `scales` package, which provides great formatting functions like `comma()` and `percent()` for numerical values.
+Other custom formatting functions can be defined here.
+
+Before a paragraph that needs to have numerical results, create a hidden chunk that loads in the data file.
+I recommend saving the object to a short variable name like `x` or `res`, to keep the inline code compact.
+Any preprocessing of the object goes in this chunk too.
+Then, in the paragraph, you can simply use, e.g., ``` ``{r} percent(x$key_num, 0.1)`` ```, to format the number and include it inline.
+
 ##### Equations
 For display math, use
 ```md
