@@ -148,7 +148,8 @@ Some general principles for using `git` for a research project:
 
 - **Describe your changes.**
   Type a short and descriptive commit message!
-  It takes a few sentences, and will make it much easier to find changes later on, should you need to. "edits", "up", "fixes", etc. are not descriptive commit messages.
+  It takes a few sentences, and will make it much easier to find changes later on, should you need to. "edits", "up", "fixes", etc. are often not descriptive enough.
+  Descriptive messages matter more for code-focused commits, in my experience.
 
 - **Make larger changes in branches.**
   If you are making a big editing pass, reorganizing code, etc., make a branch and put your edits there.
@@ -214,7 +215,7 @@ Take turns with your coauthors editing the paper section-by-section, focusing on
 
 ### General writing advice
 I strongly recommend reading Gopen & Swan's [*The Science of Scientific Writing*](https://cseweb.ucsd.edu/~swanson/papers/science-of-writing.pdf).
-It is 16 very readable pages.
+It is sixteen very readable pages.
 
 Two general but critical principles in technical writing are:
 
@@ -395,7 +396,7 @@ However, when the paper is accepted at a journal, the appendices will be separat
 You will have to manually remove references to the appendices from the main text.
 It is far easier to avoid this by writing the main text without any references to specific appendix sections.
 A good table of contents in the appendix will take care of the rest.
-It's harder to avoid making to include cross-references from the appendix to the main text, but at least at the paper acceptance stage you will only have to edit one document.
+It's harder to avoid including cross-references from the appendix to the main text, but at least at the paper acceptance stage you will only have to edit one document.
 
 
 ## Figures
