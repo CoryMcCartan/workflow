@@ -334,7 +334,7 @@ Other custom formatting functions can be defined here.
 Before a paragraph that needs to have numerical results, create a hidden chunk that loads in the data file.
 I recommend saving the object to a short variable name like `x` or `res`, to keep the inline code compact.
 Any preprocessing of the object goes in this chunk too.
-Then, in the paragraph, you can simply use, e.g., ``` ``{r} percent(x$key_num, 0.1)`` ```, to format the number and include it inline.
+Then, in the paragraph, you can simply use, e.g., `` `{r} percent(x$key_num, 0.1)` ``, to format the number and include it inline.
 
 ##### Equations
 For display math, use
