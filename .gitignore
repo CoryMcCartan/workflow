@@ -8,7 +8,8 @@
 .Renviron
 renv.lock
 
-# Temporary files created by R markdown
+# Temporary files created by Quarto
+.quarto/
 *_cache/
 *_files/
 *.utf8.md
@@ -41,7 +42,9 @@ data-out/*.*
 
 # Paper files
 paper/*.tex
+paper/*.typ
 !paper/header.tex
+!paper/macros.tex
 !paper/figures/*.pdf
 !paper/data/*.rds
 !paper/data/*.csv
