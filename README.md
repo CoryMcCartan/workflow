@@ -813,7 +813,7 @@ using these tools in computational projects:
 - *Writing*: Absolutely no AI use. Somewhat ironically given their name, LLMs
   write in a style that is both grating and out of place in an academic or
   research publication. LLM-infected writing is easy to spot ([yes,
-  really](https://arxiv.org/abs/2501.15654!) and generally very irritating to
+  really](https://arxiv.org/abs/2501.15654)!) and generally very irritating to
   have to read. Whatever benefits you think may be gained by having the LLM
   'polish' or 'revise' a piece of writing, consider the losses to you of
   readers being irritated and confused by your writing.  More importantly,
