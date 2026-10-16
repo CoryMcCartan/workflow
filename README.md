@@ -166,7 +166,23 @@ But when you suddenly need to go recover an old file version, or when you need t
 
 ## Code
 
+Well-organized code is extremely valuable, both to you as you conduct your
+analyses, to you and the journal as you prepare for publication, and for future
+students or researchers buildling on your code and analyses.
+
 ### General organization
+The first question to ask yourself is who the audience will be for you code.
+In other words, which of these three scenarios fits your project the closest?
+
+1. The only code is analysis-specific, and the project does not develop a new
+   method or approach.
+
+2. Some of the code may be of general interest for people working on closely
+   related projects.
+
+3. The project develops new methodology or computational tools that I hope will
+   be widely used by practitioners and other researchers.
+
 
 ### R style
 
@@ -259,8 +275,8 @@ This way, if you need to reformat for a journal, it can be as easy as changing f
 Sometimes, there are some additional changes, but these are much more minimal compared to reformatting in TeX, where most people intermingle their own TeX definitions with the paper formatting.
 
 This independence of content and formatting also enbales the use of alternative rendering backends.
-While TeX is powerful, `pdflatex` and `xelatex` are slow and often require multiple runs to get references and labels right.
-New software like [Typst](https://typst.app/docs/) can render documents much more quickly, and is far easier to customize than TeX.
+While TeX is powerful, <code>pdflatex</code> and <code>xelatex</code> are slow and often require multiple runs to get references and labels right.
+New software like <a href="https://typst.app/docs/">Typst</a> can render documents much more quickly, and is far easier to customize than TeX.
 (Quick: how would you change the styling of your headings in TeX? Even with an extension package to help, the syntax is not intuitive and almost impossible to memorize.)
 
 Finally, you can include raw TeX in your Quarto file, so you can ease yourself into the transition by using TeX versions of most Quarto syntax.
@@ -293,17 +309,19 @@ To include your own macros in Typst or tweak the formatting, create a file `pape
 :::
 ````
 
+<!-- {% raw %} -->
 Include this file in the manuscript by putting `{{< include _header.md >}}` at the top of your Quarto file, after the YAML header.
 
 For TeX, you can create a `header.tex` file with the same macro definitions, and include it with `include-in-header: header.tex` under the `format: cmc-article-pdf` section of your YAML header.
 
-I have not yet experimented with ways to avoid copying macros from one file to the other when changing formats, but some kind of `{{< include header.tex >}}` in the `.md` syntax might work.
-This is a relatively rare operation, thankfully.
+The `cmc-article` template uses a slightly more involved setup with a `macros.tex` that contains shared macros for both formats, while `header.tex` contains TeX-only macros and imports `macros.tex`.
+<!-- {% endraw %} -->
 
 ##### Journal templates
 When it comes time to submit to a journal, check and see if there is already a Quarto template for that journal.
 You can look at the [official repository](https://github.com/quarto-journals/), or [search all of GitHub](https://github.com/search?q=topic%3Aquarto-template+journal&type=repositories).
 If not, you can make your own without too much trouble by following the instructions in the [Quarto documentation](https://quarto.org/docs/journals/formats.html).
+Agentic LLMs are quite good at doing this as well.
 The most work is usually spent forwarding the author metadata into the right part of the template.
 If you do so, save your template to its own repository and publish it so that you and others can avoid doing this work twice!
 
@@ -418,7 +436,7 @@ It's harder to avoid including cross-references from the appendix to the main te
 
 ### Design principles
 
-To start, I highly recommend reading Franconeri et al.'s [*The Science of Visual Data Communication: What Works*](https://doi.org/10.1177/15291006211051956).
+To start, I recommend reading Franconeri et al.'s [*The Science of Visual Data Communication: What Works*](https://doi.org/10.1177/15291006211051956).
 There are many other excellent resources on general graphic design.
 I also recommend looking at figures produced by news media data teams, who are experts in communicating data to lay audiences, and who pay attention to the details of figure design.
 
