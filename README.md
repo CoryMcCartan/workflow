@@ -249,16 +249,19 @@ You can configure your editor to format your code every time you save a file, or
 
 <summary>OK, I lied, I do have specific style opinions...</summary>
 
-- `=`, not `<-`
-- Spaces, not tabs
-- Four-space indents
-- Double quotes for strings
-- `snake_case` for all variables 
-- Trying to stay within 80 characters, but certainly no more than 100 characters, per line.
+<ul>
+<li><code>=</code>, not <code><-</code></li>
+<li>Spaces, not tabs</li>
+<li>Four-space indents</li>
+<li>Double quotes for strings</li>
+<li><code>snake_case</code> for all variables </li>
+<li>Trying to stay within 80 characters, but certainly no more than 100 characters, per line.</li>
+</ul>
 
-My default `air.toml` is as follows:
+My default <code>air.toml</code> is as follows:
 
-```toml
+<code>
+<pre>
 [format]
 line-width = 100
 indent-width = 4
@@ -266,7 +269,8 @@ indent-style = "space"
 persistent-line-breaks = true
 skip = ["list", "c"]
 assignment-style = "preserve"
-```
+</pre>
+</code>
 
 </details>
 
@@ -282,13 +286,69 @@ The `purrr` package in particular contains a great set of functions for working 
 Your ability to iterate on an analysis is directly proportional to how long it takes your code to run.
 Thus it is always worth keeping an eye on the efficiency of your code.
 When it comes time to run code that is expected to take an hour or more, it is especially worth investigating if there are ways to speed it up.
-A related consideration is RAM usage.
+A related consideration is RAM usage, which is often correlated with runtime.
 Some small but meaningful changes in your code can make the difference between code that runs quickly on your laptop, allowing you to try out a dozen analyses, and code that requires an overnight run on the cluster, which is cumbersome and slow.
 
 The starting point to improving your efficiency is profiling your code with `profvis::profvis()`.
+This will visualize which lines of code are taking most of the runtime; you should focus your optimizations here.
+Once you have identified which lines are slow, you can brainstorm (or chat with an LLM) other ways to calculate the same quantity in a potentially more efficient way.
+You can then use `bench::mark()` to test out specific alternatives and measure exactly their speed and memory usage.
+Over time, you will learn certain ways to accomplish tasks in the most efficient way possible.
+
+### R package development
+This is too long a topic to say anything of much use here, but the [R packages book](https://r-pkgs.org/) should be your starting point.
+It gives exellent end-to-end coverage of the entire package development process.
+The [Advanced R book](https://adv-r.hadley.nz/) is also a great resource for advanced R topics, including quasiquotation (the magic of how `dplyr` and friends can execute expressions inside of your data frame).
+
+I encourage you to consult existing R packages for statistical workflows and think about what makes those packages well-designed (or not!).
+Spend a lot of time planning the public interface of your package; this is hard to change later and makes a huge difference in usability and ultimately in software uptake.
 
 ### A bag of tricks
 I will accumulate here a miscellaneous set of useful packages, functions, and workflows.
+
+##### Faster versions of common operations
+These packages are useful for doing common operations much more quickly than base R or tidyverse defaults.
+
+- `collapse`
+- `Rfast`
+- `matrixStats`
+
+##### Making your code even faster
+If you cannot find a built-in R function to calculate something quickly, your next best bet is to write low-level code (C, C++, Fortran, or Rust) to carry out the calculation for you.
+This can be several orders of magnitude faster than doing the calculation in base R.
+The easiest starting point is [`quickr`](https://github.com/t-kalinowski/quickr) which will transpile R code to Fortran.
+Before this package existed, the best bet was often the `Rcpp` or `cpp11` packages; the latter is a bit more lightweight but the former provides more helper functions that make the translation from R code even easier.
+
+##### Progress bars and logging
+The `cli` package is great for informative messages (in and out of pacakges) and for progress bars with ETAs during long-running loops.
+
+##### Running a function on many combinations of parameters
+This comes up all the time, especially in any kind of simulation study.
+I strongly recommend against writing a giant for loop, or worse, a nested set of for loops.
+Instead, I often do something like the following.
+
+```r
+# Make all combinations
+params = tidyr::expand( # or base expand.grid()
+    param1 = ...,
+    param2 = ...
+) |>
+    dplyr::filter(param1 >= param2) # filter as needed
+
+fn = function(param1, param2) {
+    # what should be done for each parameter combination
+    # return a value or data frame
+}
+
+params |>
+    dplyr::mutate(
+        result = pmap_dbl(pick(param1, param2), fn)
+    )
+```
+
+If the function returns more than one value, it can return a data frame, and you can use `pmap_dfr` or (now recommended) `pmap() |> bind_rows()`.
+Then you can use `tidyr::unnest()` to expand the result values back into the main data frame.
+
 
 ## Writing
 
