@@ -11,7 +11,7 @@ This document collects my opinionated recommendations on how to organize and man
 curl corymccartan.com/workflow/setup.sh | bash
 ```
 
-- Quickly jump to [**Project setup**](#project-setup), [**Code**](#code), [**Writing**](#writing), or [**Figures**](#figures).
+- Quickly jump to [**Project setup**](#project-setup), [**Code**](#code), [**Writing**](#writing), [**Figures**](#figures), or [**AI Guidelines**](#ai).
 
 - If you are viewing this file [on GitHub](https://github.com/CoryMcCartan/workflow), the upper right corner of this container contains a table-of-contents dropdown.
 
@@ -593,3 +593,86 @@ Always using the same width ensures that the text size in your figures will be c
 Sometimes, you may wish to remove the default small amount of padding included around a figure by `ggplot`.
 This can be done by providing `plot.margin = margin()` to `theme()` (the default `margin()` is all zeros).
 Some care is needed when doing this by subfigure in `patchwork`, to ensure proper spacing *between* subfigures and to remove the global margin around the whole figure.
+
+## AI Guidelines
+
+Since I first wrote this document, agentic AI tools like Claude and Codex have
+been widely adopted by research scientists. These tools are undoubtedly powerful,
+and it is because of this power that it is important that we use them carefully.
+The ability to hand work off to these tools poses a severe risk of forgetting
+how to carry out certain tasks ourselves, of not learning the underlying concepts,
+and most critically of not understanding our own work.
+
+Myself, my former advisor, and several coauthors put together a [set of
+guidelines](https://tinyurl.com/GenAIguideline) for our collaborative work,
+originally as part of the [ALARM Project](https://alarm-redist.org).
+I agree strongly with the two principles espoused there:
+
+> Our usage of GenAI should be guided by the following two principles:
+>
+> Human agency: Our goal is to conduct research as human researchers and
+> produce knowledge for human understanding. We should lead research projects
+> with the assistance of GenAI rather than letting GenAI take control of our
+> research.
+>
+> Transparency: One of the most important principles of scientific research is
+> transparency.  All researchers involved should disclose their AI usage to
+> their collaborators so that we can have a proper disclosure to the scientific
+> community at the time of research publication. 
+
+What does this mean in practice? As of Fall 2026, here is where I stand on
+using these tools in computational projects:
+
+- *Cleaning and preparing raw data*: OK if you can come up with tests or
+  invariants on the raw data that serve as an effective check that the
+  AI-written code did what you expected. Think about the Type I error rate and
+  power of the tests that you write, and make sure you and your coauthors are
+  comfortable with the tests. 
+
+- *Primary (applied) analysis code*: Generally not OK to use AI for. It is 
+  critical that you fully understand every part of the primary analysis and 
+  can make edits and tweaks yourself, potentially on short notice, and debug
+  any issues or errors. I have not been convinced this is possible if AI has
+  written any significant portion of the analysis code.
+
+- *Software or routines implementing a new method*: AI can be a great tool to 
+  help design an API or a good way to organize software. It can handle some of
+  the boilerplate of setting up a package.  However, your first pass at writing
+  the package should be your own. You should write key documentation yourself 
+  and write the key function signatures yourself. Once you have the scaffolding
+  in place, you can write software tests for new functionality. AI can be used
+  then to fill in new functionality because the tests verify correctness, and
+  the LLM can learn from your style and design choices. While AI can expand the
+  scope and coverage of your tests, and write tests for simple edge cases, you
+  must always have your own tests that evaluate the statistical and mathematical
+  correctness of your methods.
+
+- *Figures and tables*: So far, I have not been impressed by the quality of 
+  AI-generated figures. You should design these yourself, guided by the
+  principles discussed above.
+
+- *Writing*: Absolutely no AI use. Somewhat ironically given their name, LLMs
+  write in a style that is both grating and out of place in an academic or
+  research publication. LLM-infected writing is easy to spot ([yes,
+  really](https://arxiv.org/abs/2501.15654!) and generally very irritating to
+  have to read. Whatever benefits you think may be gained by having the LLM
+  'polish' or 'revise' a piece of writing, consider the losses to you of
+  readers being irritated and confused by your writing.  More importantly,
+  the process of writing is a chance for you to develop your argument and 
+  crystallize it through making specific choices about structure and phrasing.
+  Handing these choices off to a statistical model prevents you from
+  understanding your own argument and controlling how it is conveyed and put
+  in front of your readers.
+
+- *Slides and posters*. Pretty much the same policy. If you are not someone who
+  is (yet) skilled at visually designing slides and posters, an AI-generated 
+  first pass may give you some visual ideas. And if you are writing your slides
+  in Beamer or similar (not recommended) then AI can be useful to achieve a
+  certain layout or effect. But AI-assisted slides and posters are just as easy
+  to spot as writing. The entire point of slides and posters is to communicate
+  your argument and ideas to an audience, and you lose a lot of your ability to
+  control this process if AI is producing these for you. Plus even more
+  irritating than reading AI writing is having to sit through a talk with
+  slides that were AI-generated. If the speaker couldn't take the time to write
+  their own slides, why should you take the time to listen to them?
+
