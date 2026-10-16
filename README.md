@@ -11,7 +11,7 @@ This document collects my opinionated recommendations on how to organize and man
 curl corymccartan.com/workflow/setup.sh | bash
 ```
 
-- Quickly jump to [**Project setup**](#project-setup), [**Code**](#code), [**Writing**](#writing), [**Figures**](#figures), or [**AI Guidelines**](#ai).
+- Quickly jump to [**Project setup**](#project-setup), [**Code**](#code), [**Writing**](#writing), [**Figures**](#figures), or [**AI Guidelines**](#ai-guidelines).
 
 - If you are viewing this file [on GitHub](https://github.com/CoryMcCartan/workflow), the upper right corner of this container contains a table-of-contents dropdown.
 
@@ -183,10 +183,112 @@ In other words, which of these three scenarios fits your project the closest?
 3. The project develops new methodology or computational tools that I hope will
    be widely used by practitioners and other researchers.
 
+For (1), you can focus on having a good replication package.
+For (2), you can consider publishing any useful standalone functions to your
+website or GitHub gists; see, e.g. [this
+example](https://gist.github.com/CoryMcCartan/220701121c3f0520c2878e0010ced26b).
+For (3), you should write an R package to accompany your paper, and eventually
+publish it on CRAN.
+
+#### Code organization
+My preferred folder organization tracks these three categories of code.
+Analysis-specific code belongs in `replication/`.
+Shared scripts and helpers belong in `R/`.
+And general-purpose methods code should be developed concurrently as a package.
+One way to do this that I have adopted recently is to set up a separate GitHub repository for the package, one that can be made public indpendent of your project code and writing.
+You can have this repository be a 'submodule' of your main project. 
+This means it appears as an ordinary top-level subdirectory but maintains its own independent git history.
+To make things even more seamless, you can create a project-specific `.Rprofile` in the top directory that makes it easy to load your software while it is in development.
+Suppose your package is called `mysoftware`; then your `.Rprofile` could contain
+
+```r
+attach(
+    list(
+        library = function(package, ...) {
+            nm = deparse(substitute(package))
+            if (nm == "mysoftware" && dir.exists("mysoftware")) {
+                pkgload::load_all("mysoftware", export_all = FALSE, attach_testthat = FALSE)
+            } else {
+                base::library(nm, character.only = TRUE, ...)
+            }
+        }
+    ),
+    name = "shims",
+    warn.conflicts = FALSE
+)
+```
+In this way, your analysis code can use `library(mysoftware)` both during development and later when your software is published.
+
+#### Reproduciblity
+As mentioned above, full reproducibility is generally quite difficult.
+Working exclusively in Docker or other software containers is the closest we can get.
+This is not always feasible, especially for exploratory analyses.
+
+One setup I have used is to create a `Makefile` in my project root or under `replication/` (download an [example](https://dataverse.harvard.edu/file.xhtml?fileId=13322796&version=1.0)).
+This file specifies exactly what code should be run to produce each project artifact like a figure or table.
+You can set up a default command to produce all tables and figures, and even render the full paper.
+Thus someone trying to reproduce your results can simply run `make` from the main directory.
+AI agents are quite good at setting up a Makefile and handling the Makefile syntax, which is slightly arcane.
+
+In addition to self-documenting what steps should be run to reproduce, the Makefile also enables you to cache intermediate results and only regenerate them if the underlying code or data have changed.
+This is useful in both directions: saving you from rerunning expensive computations all the time, but also saving you from incorrectly *not* regenerating a computation when it has been outdated by a change in the code upstream.
+
+The R-only version of `make` is the `targets` pacakge, which has now evolved into an entire ecosystem.
+It has been several years since I gave it a full go, but I originally found `targets` to be a bit too much work compared to `make`.
+However, I know several people who have used `targets` successfuly.
+One advantage is that it tracks individual R functions and objects rather than just files, and so it has more granular insight into what needs to be re-generated.
+There are also companion packages to `targets` that are supposed to help interface with computing clusters and other resources outside of your own computer.
 
 ### R style
+A consistent coding style is always good practice, but it becomes even more important when more than one person will work with a codebase.
+I have my own opinons on what is good R style, but the only one that matters here is that you set up a workflow that enforces the same style for everyone.
+This is now easy with the [`air`](https://posit-dev.github.io/air/) and [`jarl`](https://jarl.etiennebacher.com/) formatter and linter, respectively.
+You can configure your editor to format your code every time you save a file, or configure `git` to enforce formatting before committing.
 
-### File types
+<details>
+
+<summary>OK, I lied, I do have specific style opinions...</summary>
+
+- `=`, not `<-`
+- Spaces, not tabs
+- Four-space indents
+- Double quotes for strings
+- `snake_case` for all variables 
+- Trying to stay within 80 characters, but certainly no more than 100 characters, per line.
+
+My default `air.toml` is as follows:
+
+```toml
+[format]
+line-width = 100
+indent-width = 4
+indent-style = "space"
+persistent-line-breaks = true
+skip = ["list", "c"]
+assignment-style = "preserve"
+```
+
+</details>
+
+Beyond the nuts-and-bolts of indents and and assignment operators, it is also worth thinking about your higher-level coding 'style.'
+I generally encourage thinking functionally, i.e., writing small-ish functions that take in an input and produce an output and no other side effects, and then combining and composing these functions togther into an overall workflow.
+If you set up your functions well, your main analysis code can be quite short!
+
+This is very much a philosophy consistent with the R language itself and the `tidyverse` set of packages.
+I try to chain functions together functions with the pipe (`|>`) and to use tidyverse functions where possible.
+The `purrr` package in particular contains a great set of functions for working in a functional style.
+
+### Efficiency
+Your ability to iterate on an analysis is directly proportional to how long it takes your code to run.
+Thus it is always worth keeping an eye on the efficiency of your code.
+When it comes time to run code that is expected to take an hour or more, it is especially worth investigating if there are ways to speed it up.
+A related consideration is RAM usage.
+Some small but meaningful changes in your code can make the difference between code that runs quickly on your laptop, allowing you to try out a dozen analyses, and code that requires an overnight run on the cluster, which is cumbersome and slow.
+
+The starting point to improving your efficiency is profiling your code with `profvis::profvis()`.
+
+### A bag of tricks
+I will accumulate here a miscellaneous set of useful packages, functions, and workflows.
 
 ## Writing
 
