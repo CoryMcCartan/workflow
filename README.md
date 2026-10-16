@@ -54,7 +54,7 @@ Overall, these recommendations are guided by the following principles:
 3.  **Keeping an eye on reproducibility**.
     Reproducibility means that other people (or future-you) can recreate your full analysis themselves, given instructions, raw data, and code.
     Achieving full reproducibility often means being able to recreate your exact operating system, package versions, and more.
-    While this is not always easily achievable or desirable, trying to maximize reproducibility serves a couple key goals.
+    While this is not always easily achievable or desirable, trying to maximize reproducibility serves a couple of key goals.
     First, at most journals (and ideally all of them), you will be required to submit a reproducibility package, and when your project is designed around reproducibility, this can be as simple as ZIP-ing up your project folder and submitting it.
     Second, reproducibility makes it far easier to make changes to your analysis code, such as when a reviewer (or your coauthor) asks for a variation of an analysis, or when the input data are changed.
     This is especially important when revisiting a project after a long time, when you might have forgotten any manual steps you took to get from raw data to final outputs.
@@ -71,7 +71,7 @@ This document assumes R is your primary analysis language, but most of the advic
 You should install [Quarto](https://quarto.org/docs/get-started/), if it is not already installed or included in your IDE (it is bundled with Positron and RStudio).
 
 You should also have `git` installed, and an account on [GitHub](https://github.com) or similar.
-I find the [`gh`](https://cli.github.com/) command-line utility useful for managaing GitHub repositories, but many people I work with use [GitHub Desktop](https://github.com/apps/desktop) and like it.
+I find the [`gh`](https://cli.github.com/) command-line utility useful for managing GitHub repositories, but many people I work with use [GitHub Desktop](https://github.com/apps/desktop) and like it.
 
 ## Project setup
 
@@ -133,7 +133,7 @@ Some general principles for using `git` for a research project:
   Raw data files should also not be committed—I recommend sharing them through a different system.
   Most coauthors do not need access to the raw data, just the cleaned data or outputs of the analysis.
   (It is also possible for your analysis code to download the raw data itself, which is ideal where possible.)
-  The exception to this are paper figures and tables, which need to be present to render the paper and for which it would not be reasonable to expect coauthors to generate them every time in order to render the paper.
+  The exceptions to this are paper figures and tables, which need to be present to render the paper and for which it would not be reasonable to expect coauthors to generate them every time in order to render the paper.
 
   - You should _aggressively_ use `.gitignore` to avoid accidentally committing large or auto-generated files.
   **NEVER** override the `.gitignore` file to commit a large file.
@@ -168,7 +168,7 @@ But when you suddenly need to go recover an old file version, or when you need t
 
 Well-organized code is extremely valuable, both to you as you conduct your
 analyses, to you and the journal as you prepare for publication, and for future
-students or researchers buildling on your code and analyses.
+students or researchers building on your code and analyses.
 
 ### General organization
 The first question to ask yourself is who the audience will be for you code.
@@ -195,7 +195,7 @@ My preferred folder organization tracks these three categories of code.
 Analysis-specific code belongs in `replication/`.
 Shared scripts and helpers belong in `R/`.
 And general-purpose methods code should be developed concurrently as a package.
-One way to do this that I have adopted recently is to set up a separate GitHub repository for the package, one that can be made public indpendent of your project code and writing.
+One way to do this that I have adopted recently is to set up a separate GitHub repository for the package, one that can be made public independent of your project code and writing.
 You can have this repository be a 'submodule' of your main project. 
 This means it appears as an ordinary top-level subdirectory but maintains its own independent git history.
 To make things even more seamless, you can create a project-specific `.Rprofile` in the top directory that makes it easy to load your software while it is in development.
@@ -219,7 +219,7 @@ attach(
 ```
 In this way, your analysis code can use `library(mysoftware)` both during development and later when your software is published.
 
-#### Reproduciblity
+#### Reproducibility
 As mentioned above, full reproducibility is generally quite difficult.
 Working exclusively in Docker or other software containers is the closest we can get.
 This is not always feasible, especially for exploratory analyses.
@@ -233,15 +233,15 @@ AI agents are quite good at setting up a Makefile and handling the Makefile synt
 In addition to self-documenting what steps should be run to reproduce, the Makefile also enables you to cache intermediate results and only regenerate them if the underlying code or data have changed.
 This is useful in both directions: saving you from rerunning expensive computations all the time, but also saving you from incorrectly *not* regenerating a computation when it has been outdated by a change in the code upstream.
 
-The R-only version of `make` is the `targets` pacakge, which has now evolved into an entire ecosystem.
+The R-only version of `make` is the `targets` package, which has now evolved into an entire ecosystem.
 It has been several years since I gave it a full go, but I originally found `targets` to be a bit too much work compared to `make`.
-However, I know several people who have used `targets` successfuly.
+However, I know several people who have used `targets` successfully.
 One advantage is that it tracks individual R functions and objects rather than just files, and so it has more granular insight into what needs to be re-generated.
 There are also companion packages to `targets` that are supposed to help interface with computing clusters and other resources outside of your own computer.
 
 ### R style
 A consistent coding style is always good practice, but it becomes even more important when more than one person will work with a codebase.
-I have my own opinons on what is good R style, but the only one that matters here is that you set up a workflow that enforces the same style for everyone.
+I have my own opinions on what is good R style, but the only one that matters here is that you set up a workflow that enforces the same style for everyone.
 This is now easy with the [`air`](https://posit-dev.github.io/air/) and [`jarl`](https://jarl.etiennebacher.com/) formatter and linter, respectively.
 You can configure your editor to format your code every time you save a file, or configure `git` to enforce formatting before committing.
 
@@ -261,25 +261,22 @@ You can configure your editor to format your code every time you save a file, or
 My default <code>air.toml</code> is as follows:
 
 <code>
-<pre>
-[format]
+<pre>[format]
 line-width = 100
 indent-width = 4
 indent-style = "space"
 persistent-line-breaks = true
 skip = ["list", "c"]
-assignment-style = "preserve"
-</pre>
+assignment-style = "preserve"</pre>
 </code>
-
 </details>
 
 Beyond the nuts-and-bolts of indents and and assignment operators, it is also worth thinking about your higher-level coding 'style.'
-I generally encourage thinking functionally, i.e., writing small-ish functions that take in an input and produce an output and no other side effects, and then combining and composing these functions togther into an overall workflow.
+I generally encourage thinking functionally, i.e., writing small-ish functions that take in an input and produce an output and no other side effects, and then combining and composing these functions together into an overall workflow.
 If you set up your functions well, your main analysis code can be quite short!
 
 This is very much a philosophy consistent with the R language itself and the `tidyverse` set of packages.
-I try to chain functions together functions with the pipe (`|>`) and to use tidyverse functions where possible.
+I try to chain functions together with the pipe (`|>`) and to use tidyverse functions where possible.
 The `purrr` package in particular contains a great set of functions for working in a functional style.
 
 ### Efficiency
@@ -297,7 +294,7 @@ Over time, you will learn certain ways to accomplish tasks in the most efficient
 
 ### R package development
 This is too long a topic to say anything of much use here, but the [R packages book](https://r-pkgs.org/) should be your starting point.
-It gives exellent end-to-end coverage of the entire package development process.
+It gives excellent end-to-end coverage of the entire package development process.
 The [Advanced R book](https://adv-r.hadley.nz/) is also a great resource for advanced R topics, including quasiquotation (the magic of how `dplyr` and friends can execute expressions inside of your data frame).
 
 I encourage you to consult existing R packages for statistical workflows and think about what makes those packages well-designed (or not!).
@@ -320,7 +317,7 @@ The easiest starting point is [`quickr`](https://github.com/t-kalinowski/quickr)
 Before this package existed, the best bet was often the `Rcpp` or `cpp11` packages; the latter is a bit more lightweight but the former provides more helper functions that make the translation from R code even easier.
 
 ##### Progress bars and logging
-The `cli` package is great for informative messages (in and out of pacakges) and for progress bars with ETAs during long-running loops.
+The `cli` package is great for informative messages (in and out of packages) and for progress bars with ETAs during long-running loops.
 
 ##### Running a function on many combinations of parameters
 This comes up all the time, especially in any kind of simulation study.
@@ -406,7 +403,7 @@ Mechanically, hierarchical structure means adding clear signposting so that read
 1. **Know your argument.**
 Your paper is making one or two key points.
 Sometimes, these are obvious: "My new method does X better than existing methods."
-But it is vital to know the argument you are making, and any subsidiary but important points you want readers to take away, and to make sure that thesse points are made clearly throughout the paper.
+But it is vital to know the argument you are making, and any subsidiary but important points you want readers to take away, and to make sure that these points are made clearly throughout the paper.
 
 Some useful techniques for editing:
 
@@ -430,13 +427,13 @@ Quarto, the successor to R Markdown, enables you to cleanly separate content and
 
 In TeX, there are no clean and modern solutions for the need to include numerical results from an analysis in the manuscript.
 In practice, most people copy in numbers manually, which is error-prone and time consuming.
-Even if you think the numbers will be copied once, I can almost guaranteee you will find yourself repeating the process multiple times, and it will not be long before you forget to keep numbers in sync and end up with a mismatch.
+Even if you think the numbers will be copied once, I can almost guarantee you will find yourself repeating the process multiple times, and it will not be long before you forget to keep numbers in sync and end up with a mismatch.
 
 On the formatting side, Quarto separates all formatting into template files, of which there are many built-in options.
 This way, if you need to reformat for a journal, it can be as easy as changing from, e.g., `format: pdf` to `format: jasa-pdf`.
 Sometimes, there are some additional changes, but these are much more minimal compared to reformatting in TeX, where most people intermingle their own TeX definitions with the paper formatting.
 
-This independence of content and formatting also enbales the use of alternative rendering backends.
+This independence of content and formatting also enables the use of alternative rendering backends.
 While TeX is powerful, <code>pdflatex</code> and <code>xelatex</code> are slow and often require multiple runs to get references and labels right.
 New software like <a href="https://typst.app/docs/">Typst</a> can render documents much more quickly, and is far easier to customize than TeX.
 (Quick: how would you change the styling of your headings in TeX? Even with an extension package to help, the syntax is not intuitive and almost impossible to memorize.)
@@ -445,7 +442,7 @@ Finally, you can include raw TeX in your Quarto file, so you can ease yourself i
 </details>
 
 A public example (from several years ago) of this setup can be found [here](https://github.com/CoryMcCartan/proj-avg/blob/main/paper/proj-avg.qmd).
-You can also ask me for more recent examp les.
+You can also ask me for more recent examples.
 
 #### Paper formatting
 ##### Default template
@@ -609,8 +606,8 @@ The typical reader of your paper has far less background knowledge of the projec
 This means that figures need to be understandable without reading the main text, and should be as simple as possible.
 
 1. **Know your argument.**
-You can include a limited number of figures in each paper, so every one shoud contribute to the overall argument you are making.
-Make sure can describe, for each figure, the argument or point it is making, and make sure your choices about how to encode data into figure aesthetics (position, color, size, etc.) are intentional and support that argument.
+You can include a limited number of figures in each paper, so every one should contribute to the overall argument you are making.
+Make sure you can describe, for each figure, the argument or point it is making, and make sure your choices about how to encode data into figure aesthetics (position, color, size, etc.) are intentional and support that argument.
 
 Several additional principles that are to varying degrees more figure-specific:
 
@@ -705,7 +702,7 @@ A few reasonable options to start with are these:
 ![](https://cran.r-project.org/web/packages/wacolors/refman/figures/README-cont-palettes-16.png)
 
 You can copy palette colors directly from the package, or use the built-in `ggplot`-compatible `scale_` functions.
-When using a discrete palettes, still try to keep the number of distinct colors to a minimum, as there are different kinds of colorblindness and some combinations may still be difficult to distinguish.
+When using discrete palettes, still try to keep the number of distinct colors to a minimum, as there are different kinds of colorblindness and some combinations may still be difficult to distinguish.
 Also keep in mind that smaller elements (dots, lines) will be harder to distinguish on the basis of color than larger areas like bars or regions on a map.
 Larger areas often should use lighter colors and palettes as well (you can often lighten yourself by setting `alpha` to a value less than 1), compared to points or lines.
 
@@ -743,7 +740,7 @@ Figure export is done via `ggsave` and should *always* be to a PDF file.
 Saving figures as PDFs (or very rarely, when there are PDF bugs, as SVGs) is preferable to PNGs for a few reasons.
 
 1.  File sizes are smaller, so `git` syncs faster and your repository uses less disk space
-2.  PDF figuress avoids grainy images in the paper PDF and reduces the paper PDF file size
+2.  PDF figures avoid grainy images in the paper PDF and reduce the paper PDF file size
 3.  Many journals need high-res images and prefer you to provide PDFs anyway
 </details>
 
@@ -772,12 +769,12 @@ I agree strongly with the two principles espoused there:
 
 > Our usage of GenAI should be guided by the following two principles:
 >
-> Human agency: Our goal is to conduct research as human researchers and
+> **Human agency**: Our goal is to conduct research as human researchers and
 > produce knowledge for human understanding. We should lead research projects
 > with the assistance of GenAI rather than letting GenAI take control of our
 > research.
 >
-> Transparency: One of the most important principles of scientific research is
+> **Transparency**: One of the most important principles of scientific research is
 > transparency.  All researchers involved should disclose their AI usage to
 > their collaborators so that we can have a proper disclosure to the scientific
 > community at the time of research publication. 
